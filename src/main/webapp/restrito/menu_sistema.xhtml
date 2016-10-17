@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition>
+	<sec:ifAnyGranted roles="ROLE_USUARIO">
+		<h:form id="formBarraMenu">
+			<div class="esquerda">
+				<sec:ifAnyGranted roles="ROLE_ADMINISTRADOR">
+					<h:commandLink action="/admin/principal" title="Administrativo">
+						<h:graphicImage library="imagens" name="administrator.png"/>
+					</h:commandLink>
+				</sec:ifAnyGranted>
+				<h:commandLink action="/restrito/principal" title="Principal">
+					<h:graphicImage library="imagens" name="home-4-24.png"/>
+				</h:commandLink>
+			</div>
+			<div class="direita">
+				#{request.remoteUser}
+				<a onclick="document.location='#{request.contextPath}/j_spring_security_logout'" title="Sair">
+					<h:graphicImage library="imagens" name="logout-24.png"/>
+				</a>
+			</div>
+		</h:form>
+	</sec:ifAnyGranted>
+</ui:composition>
+</html>

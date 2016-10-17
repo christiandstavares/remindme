@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/templates/interna.xhtml">
+	<ui:define name="corpo">
+		<h2>Usuários</h2>
+		<h:form id="listaUsuarios">
+			<h:messages/>
+			<h:dataTable class="tabela" value="#{usuarioBean.lista}" var="usuario" rules="rows" cellpadding="5"
+				headerClass="cabecalho" rowClasses="linha1, linha2" captionClass="legenda"
+				columnClasses="coluna3, coluna3, coluna2, coluna2, coluna3, coluna3">
+				<f:facet name="caption">
+					<span class="cabecalho2">Listagem de Usuários</span><br/>
+					A listagem a seguir exibe a relação de usuários cadastrados no sistema. Você poderá realizar ativação, 
+					desativação e exclusão para os usuários.
+				</f:facet>
+				
+				<h:column>
+					<h:commandLink action="#{usuarioBean.ativar}">
+						<h:graphicImage library="imagens" name="ativo_#{usuario.ativo}.png" style="border:0"/>
+						<f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.usuario}"/>
+					</h:commandLink>
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">Código</f:facet>
+					#{usuario.codigo}
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+					#{usuario.nome}
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">e-Mail</f:facet>
+					#{usuario.email}
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">Permissão</f:facet>
+					<h:commandLink action="#{usuarioBean.atribuiPermissao(usuario, 'ROLE_ADMINISTRADOR')}" 
+					title="Permissão Administrador">
+						<h:graphicImage library="imagens" 
+						name="admin_#{usuario.permissao.contains('ROLE_ADMINISTRADOR')}.png" 
+						style="border:0"/>
+					</h:commandLink>
+				</h:column>
+				
+				<h:column>
+					<h:commandLink action="#{usuarioBean.excluir}" 
+					onclick="if(!confirm('Confirma a exclusão do usuário #{usuario.nome}?')) return false;">
+						<h:graphicImage library="imagens" name="delete-icon.png" style="border:0"/>
+						<f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.usuario}" />
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

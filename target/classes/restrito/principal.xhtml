@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/templates/interna.xhtml">
+	<ui:define name="corpo">
+		<h2>Meus logins e senhas</h2>
+		<div id="formPrincipal">
+		<h:form id="edicao">
+			<h:messages/>
+			<h:inputHidden value="#{lembreteBean.selecionado.lembrete}"/>
+				<h:commandLink value="Adicionar">
+					<f:setPropertyActionListener value="true" target="#{contextoBean.renderizado}"/>
+					<f:ajax execute="@this" render=":edicao"/>
+				</h:commandLink>
+				<hr/>
+				<h:panelGrid columns="2" rendered="#{contextoBean.renderizado}">
+					<h:outputLabel value="Descrição: " for="descricao"/>
+					<h:inputText size="45" id="descricao" value="#{lembreteBean.selecionado.descricao}" maxlength="45"/>
+					
+					<h:outputLabel value="Login: " for="login"/>
+					<h:inputText size="45" id="login" value="#{lembreteBean.selecionado.loginLembrete}"
+						required="true" maxlength="45"/>
+					
+					<h:outputLabel value="Senha: " for="senha"/>
+					<h:inputText size="45" id="senha" value="#{lembreteBean.selecionado.senhaLembrete}"
+						required="true" maxlength="45"/>
+					
+					<h:commandButton class="botao" value="Salvar" action="#{lembreteBean.salvar}">
+						<f:ajax execute="@form" render=":edicao :listagem"/>
+					</h:commandButton>
+					<h:commandButton class="botao" value="Cancelar" >
+						<f:setPropertyActionListener value="false" target="#{contextoBean.renderizado}"/>
+						<f:ajax execute="@this" render=":edicao"/>
+					</h:commandButton>
+				</h:panelGrid>
+		</h:form>
+		<h:form id="listagem">
+			<h:dataTable class="tabela" value="#{lembreteBean.lista}" var="lembrete" rules="rows" cellpadding="5px"
+				headerClass="cabecalho" rowClasses="linha1, linha2" rendered="#{not empty lembreteBean.lista}"
+				columnClasses="coluna1, coluna1, coluna1, coluna3, coluna3">
+				<h:column>
+					<f:facet name="header">Descrição</f:facet>
+					#{lembrete.descricao}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Login</f:facet>
+					#{lembrete.loginLembrete}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Senha</f:facet>
+					#{lembrete.senhaLembrete}
+				</h:column>
+				<h:column>
+					<h:commandLink title="Editar">
+						<f:setPropertyActionListener value="true" target="#{contextoBean.renderizado}"/>
+						<f:ajax execute="@this" render=":edicao"/>
+						<h:graphicImage library="imagens" name="edit-11-24.png"/>
+						<f:setPropertyActionListener value="#{lembrete}" target="#{lembreteBean.selecionado}"/>
+					</h:commandLink>
+				</h:column>
+				<h:column>
+					<h:commandLink action="#{lembreteBean.excluir}" title="Excluir">
+						<f:ajax execute="@this" render=":listagem"/>
+						<h:graphicImage library="imagens" name="delete-icon.png"/>
+						<f:setPropertyActionListener value="#{lembrete}" target="#{lembreteBean.selecionado}"/>
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>
